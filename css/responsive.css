@@ -1,0 +1,122 @@
+@media (max-width: 991px) {
+  .home .img{
+    height: 300px !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+
+  .home .card-wrapper{
+    border-radius: 0 0 20px 20px !important;
+  }
+}
+
+@media (max-width: 767px) {
+	.navbar{
+    position: relative;
+  }
+
+  .navbar .container .logo{
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .actions{
+    padding: 20px ;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    width: 100%;
+    background-color: white;
+    display: none !important;
+    overflow: hidden;
+    transition: .3s;
+  }
+
+  .actions.active{
+    display: block !important;
+  }
+
+  .profile{
+    margin-top: 20px;
+  }
+
+	#recipe-hero {
+		min-height: 280px;
+	}
+
+	#recipe-hero .img {
+		min-height: 280px;
+		border-radius: 20px 20px 0 0;
+	}
+
+	.card-wrapper {
+		border-radius: 0 0 20px 20px;
+		padding: 20px;
+	}
+
+	.recipe-title {
+		font-size: 28px;
+	}
+
+	.recipe-subtitle {
+		font-size: 15px;
+	}
+}
+
+@media (max-width: 575px) {
+	.navbar {
+		padding-top: 12px;
+		padding-bottom: 12px;
+	}
+
+	.logo .text h1 {
+		font-size: 20px;
+	}
+
+	.logo .text p {
+		font-size: 13px;
+	}
+
+	.card-wrapper {
+		padding: 16px;
+	}
+
+	.recipe-tabs {
+		gap: 6px;
+	}
+
+	.recipe-tabs .nav-link {
+		padding: 10px 4px;
+		font-size: 14px;
+	}
+
+	.ingredients-box {
+		max-height: 320px;
+		padding: 18px;
+	}
+
+	.try-another-btn {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+@media (max-width: 417px) {
+  .bottom-label {
+    padding: 10px 15px;
+  }
+  .bottom-label i {
+	font-size: 15px;
+}
+
+.bottom-label .text {
+	color: var(--text-secondary);
+	font-size: 12px;
+	font-weight: 400;
+}
+
+.bottom-label .time {
+	color: var(--text-primary);
+	font-size: 14px;
+	font-weight: 700;
+}
+  }
