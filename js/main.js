@@ -17,34 +17,18 @@ let deleteBtn = document.getElementById("delete");
 let search = document.getElementById("search");
 let currentIndex;
 
-
 // for random avatar background
-const avatarColors = [
-  "#ef4444",
-  "#f97316",
-  "#eab308",
-  "#22c55e",
-  "#14b8a6",
-  "#06b6d4",
-  "#3b82f6",
-  "#6366f1",
-  "#8b5cf6",
-  "#ec4899"
-];
+const avatarColors = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#14b8a6", "#06b6d4", "#3b82f6", "#6366f1", "#8b5cf6", "#ec4899"];
 
 function getRandomAvatarColor() {
-  let randomIndex = Math.floor(Math.random() * avatarColors.length);
-  return avatarColors[randomIndex];
+	let randomIndex = Math.floor(Math.random() * avatarColors.length);
+	return avatarColors[randomIndex];
 }
 
 // validation for input
 contactName.onkeyup = nameValidation;
 contactPhone.onkeyup = phoneValidation;
 contactEmail.onkeyup = emailValidation;
-
-
-
-
 
 function checkPhoneDuplicate() {
 	let value = contactPhone.value.trim();
@@ -84,7 +68,6 @@ function checkEmailDuplicate() {
 	return true;
 }
 
-
 // for bootstrap modal
 let addContactModal = new bootstrap.Modal(document.getElementById("addContactModal"));
 
@@ -100,32 +83,21 @@ addContactForm.addEventListener("submit", function (e) {
 });
 
 saveContactBtn.addEventListener("click", function () {
-  if (
-        !nameValidation() ||
-        !phoneValidation() ||
-        !emailValidation()
-    ) {
-        return;
-    }
+	if (!nameValidation() || !phoneValidation() || !emailValidation()) {
+		return;
+	}
 
-    	// duplicate checks (shown as SweetAlert)
+	// duplicate checks (shown as SweetAlert)
 	if (!checkPhoneDuplicate()) {
 		return;
 	}
 	if (!checkEmailDuplicate()) {
 		return;
 	}
-	let isUpdate = saveContactBtn.innerHTML.includes("update") ;
+	let isUpdate = saveContactBtn.innerHTML.includes("update");
 	let contact = {
-		image:
-			contactPhotoInput.files[0]
-				? `./image/${contactPhotoInput.files[0].name}`
-				: isUpdate && contactList[currentIndex]
-				? contactList[currentIndex].image
-				: "",
-     avatarColor: isUpdate && contactList[currentIndex]
-    ? contactList[currentIndex].avatarColor
-    : getRandomAvatarColor(),
+		image: contactPhotoInput.files[0] ? `./image/${contactPhotoInput.files[0].name}` : isUpdate && contactList[currentIndex] ? contactList[currentIndex].image : "",
+		avatarColor: isUpdate && contactList[currentIndex] ? contactList[currentIndex].avatarColor : getRandomAvatarColor(),
 		name: contactName.value,
 		phone: contactPhone.value,
 		email: contactEmail.value,
@@ -139,7 +111,7 @@ saveContactBtn.addEventListener("click", function () {
 	if (saveContactBtn.innerHTML == "update") {
 		contactList.splice(currentIndex, 1, contact);
 		saveContactBtn.innerHTML = "add Contact";
-    Swal.fire({
+		Swal.fire({
 			icon: "success",
 			title: "Updated Successfully",
 			text: "Contact information updated successfully",
@@ -147,18 +119,18 @@ saveContactBtn.addEventListener("click", function () {
 		});
 	} else {
 		contactList.push(contact);
-    Swal.fire({
-				icon: "success",
-				title: "Added Successfully",
-				text: "Contact added successfully",
-				confirmButtonColor: "#3085d6",
+		Swal.fire({
+			icon: "success",
+			title: "Added Successfully",
+			text: "Contact added successfully",
+			confirmButtonColor: "#3085d6",
 		});
 	}
 	localStorage.setItem("contact", JSON.stringify(contactList));
 	addContactForm.reset();
 
 	displayContacts();
-  addContactModal.hide();
+	addContactModal.hide();
 });
 
 function getInitials(name) {
@@ -171,8 +143,10 @@ function getInitials(name) {
 	}
 }
 
-function emptyContactsTemplate() {
-	return `
+function displayContacts(searchValue = "") {
+	let box = "";
+	if (contactList.length === 0) {
+		document.getElementById("rowBody").innerHTML = `
 	<div class="col-12">
 		<div class="empty-state">
 			<div class="empty-state-icon"><i class="fa-solid fa-address-book"></i></div>
@@ -181,30 +155,13 @@ function emptyContactsTemplate() {
 		</div>
 	</div>
 	`;
-}
-
-function emptySearchTemplate() {
-	return `
-	<div class="col-12">
-		<div class="empty-state">
-			<div class="empty-state-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-			<div class="empty-state-title">No contacts found</div>
-			<div class="empty-state-sub">Try a different search term</div>
-		</div>
-	</div>
-	`;
-}
-function displayContacts(searchValue = "") {
-	let box = "";
-  if (contactList.length === 0) {
-		document.getElementById("rowBody").innerHTML = emptyContactsTemplate();
 		displayFav();
 		displayEmergency();
 		updateStats();
 		return;
 	}
 	for (let i = 0; i < contactList.length; i++) {
-			box += `
+		box += `
     <div class="col-12 col-md-6">
             <div class="contact-card h-100">
               <div class="d-flex gap-3">
@@ -252,8 +209,8 @@ function displayContacts(searchValue = "") {
             </div>
           </div>
           `;
-		}
-	
+	}
+
 	document.getElementById("rowBody").innerHTML = box;
 	displayFav();
 	displayEmergency();
@@ -262,11 +219,10 @@ function displayContacts(searchValue = "") {
 
 function displayFav() {
 	let box = "";
-  if (!contactList.some(contact => contact.favorite)) {
-    document.getElementById("sideFavoritesPanel").innerHTML =
-        `<div class="empty-state-side">No favorites yet</div>`;
-    return;
-}
+	if (!contactList.some((contact) => contact.favorite)) {
+		document.getElementById("sideFavoritesPanel").innerHTML = `<div class="empty-state-side">No favorites yet</div>`;
+		return;
+	}
 	for (let i = 0; i < contactList.length; i++) {
 		if (contactList[i].favorite) {
 			box += `
@@ -286,11 +242,10 @@ function displayFav() {
 
 function displayEmergency() {
 	let box = "";
-  if (!contactList.some(contact => contact.emergency)) {
-    document.getElementById("sideEmergencyPanel").innerHTML =
-        `<div class="empty-state-side">No favorites yet</div>`;
-    return;
-}
+	if (!contactList.some((contact) => contact.emergency)) {
+		document.getElementById("sideEmergencyPanel").innerHTML = `<div class="empty-state-side">No favorites yet</div>`;
+		return;
+	}
 	for (let i = 0; i < contactList.length; i++) {
 		if (contactList[i].emergency) {
 			box += `
@@ -389,16 +344,13 @@ function editContact(index) {
 	addContactModal.show();
 }
 
-search.onkeyup = searchForContact
+search.onkeyup = searchForContact;
 
-function searchForContact(){
-  let box = '';
-  for(let i = 0; i < contactList.length; i++){
-    if(contactList[i].name.toLowerCase().includes(search.value.toLowerCase()) ||
-      contactList[i].phone.toLowerCase().includes(search.value.toLowerCase()) ||
-      contactList[i].email.toLowerCase().includes(search.value.toLowerCase())
-    ){
-      box += `
+function searchForContact() {
+	let box = "";
+	for (let i = 0; i < contactList.length; i++) {
+		if (contactList[i].name.toLowerCase().includes(search.value.toLowerCase()) || contactList[i].phone.toLowerCase().includes(search.value.toLowerCase()) || contactList[i].email.toLowerCase().includes(search.value.toLowerCase())) {
+			box += `
       <div class="col-12 col-md-6">
             <div class="contact-card h-100">
               <div class="d-flex gap-3">
@@ -444,72 +396,83 @@ function searchForContact(){
               </div>
             </div>
           </div>
-          `
-    };
-    document.getElementById("rowBody").innerHTML = box;
-  }
+          `;
+		}
+		let rowBody = document.getElementById("rowBody");
+		if (box === "") {
+			rowBody.innerHTML = `
+	<div class="col-12">
+		<div class="empty-state">
+			<div class="empty-state-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+			<div class="empty-state-title">No contacts found</div>
+			<div class="empty-state-sub">Try a different search term</div>
+		</div>
+	</div>
+	`;
+		} else {
+			rowBody.innerHTML = box;
+		}
+	}
 }
 
-
-function nameValidation(){
-  let regex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
-  if(regex.test(contactName.value)){
-    contactName.classList.remove("is-invalid");
-    contactName.classList.add("is-valid");
-    document.getElementById("nameError").classList.remove("show")
-    return true;
-  }else{
-    contactName.classList.remove("is-valid");
-    contactName.classList.add("is-invalid");
-    document.getElementById("nameError").classList.add("show")
-    return false;
-  }
+function nameValidation() {
+	let regex = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
+	if (regex.test(contactName.value)) {
+		contactName.classList.remove("is-invalid");
+		contactName.classList.add("is-valid");
+		document.getElementById("nameError").classList.remove("show");
+		return true;
+	} else {
+		contactName.classList.remove("is-valid");
+		contactName.classList.add("is-invalid");
+		document.getElementById("nameError").classList.add("show");
+		return false;
+	}
 }
 
-function phoneValidation(){
-  let regex = /^01[0125][0-9]{8}$/;
-  if(regex.test(contactPhone.value)){
-    contactPhone.classList.remove("is-invalid");
-    contactPhone.classList.add("is-valid");
-    document.getElementById("phoneError").classList.remove("show")
-    return true;
-  }else{
-    contactPhone.classList.remove("is-valid");
-    contactPhone.classList.add("is-invalid");
-    document.getElementById("phoneError").classList.add("show")
-    return false;
-  }
+function phoneValidation() {
+	let regex = /^01[0125][0-9]{8}$/;
+	if (regex.test(contactPhone.value)) {
+		contactPhone.classList.remove("is-invalid");
+		contactPhone.classList.add("is-valid");
+		document.getElementById("phoneError").classList.remove("show");
+		return true;
+	} else {
+		contactPhone.classList.remove("is-valid");
+		contactPhone.classList.add("is-invalid");
+		document.getElementById("phoneError").classList.add("show");
+		return false;
+	}
 }
 
-function emailValidation(){
-  let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-  if(regex.test(contactEmail.value)){
-    contactEmail.classList.remove("is-invalid");
-    contactEmail.classList.add("is-valid");
-    document.getElementById("emailError").classList.remove("show")
-    return true;
-  }else{
-    contactEmail.classList.remove("is-valid");
-    contactEmail.classList.add("is-invalid");
-    document.getElementById("emailError").classList.add("show")
-    return false;
-  }
+function emailValidation() {
+	let regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+	if (regex.test(contactEmail.value)) {
+		contactEmail.classList.remove("is-invalid");
+		contactEmail.classList.add("is-valid");
+		document.getElementById("emailError").classList.remove("show");
+		return true;
+	} else {
+		contactEmail.classList.remove("is-valid");
+		contactEmail.classList.add("is-invalid");
+		document.getElementById("emailError").classList.add("show");
+		return false;
+	}
 }
 
-
-function checkPhoneDuplicate(){
-  let value = contactPhone.value.trim();
-  let isDuplicate = contactList.some(function (c, i) {
-    return c.phone === value && i !== currentIndex;
-  });
-  if(isDuplicate){
-    Swal.fire({
-      icon: "error",
-      title: "Duplicate Phone Number",
-      text: "This phone number is already used by another contact",
-      confirmButtonColor: "#dc3545",
-    });
-    return false;
-  }
-  return true;
+function checkPhoneDuplicate() {
+	let value = contactPhone.value.trim();
+	let isDuplicate = contactList.some(function (c, i) {
+		return c.phone === value && i !== currentIndex;
+	});
+	if (isDuplicate) {
+		Swal.fire({
+			icon: "error",
+			title: "Duplicate Phone Number",
+			text: "This phone number is already used by another contact",
+			confirmButtonColor: "#dc3545",
+		});
+		return false;
+	}
+	return true;
 }
